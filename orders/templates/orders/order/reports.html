@@ -1,0 +1,31 @@
+{% extends 'shop/base.html' %}
+{#{% load test %}#}
+{#{% load division %}#}
+{% load mathfilters %}
+{% block content %}
+    <h2 align="center">TOP 10 DES PRODUITS LES PLUS VENDUS</h2>
+    <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+    <form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>Produits</th>
+                <th>Quantite</th>
+                <th>Pourcentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr class="row{% cycle "1" "2" %}">
+                    <td>{{ forloop.counter }}</td>
+                    <td class="num"> {{ item.product }} </td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="num">{{ item.quantity|div:total_quantity|mul:100|floatformat:"2"  }}%</td>
+    {#                <td class="num"> {{ item.get_cost }} KMF</td>#}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <h2 align="center">LISTE DES PRODUITS</h2>
+    <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+    <form>
+        <div class="input-group">
+            <label for="code" class="nav-link"><h2>Rechercher</h2> </label>
+                <input  id="productCode" type="text" class="form-control form-control-lg" name="productCode"  placeholder="Rechercher par le code du produit ..." onkeyup="myFunction()">
+            <br>
+        </div>
+        <table class="table table-striped" id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th width="10%">Code</th>
+                    <th width="50%">Libéllé</th>
+                    <th width="11%">Qté</th>
+                    <th width="12%">Unité </th>
+                    <th width="12%">CR</th>
+                    <th>PU</th>
+                    <th style="align-self: center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if products|length < 1 %}
+                <tr>
+                <td colspan="20" class="text-center">Aucune donnée trouvée, veuillez ajouter quelques données!</td>
+                </tr>
+            {% else %}
+                {% for product in prod_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.code }}</td>
+                        <td>{{ product.libelle }}</td>
+                        <td>{{ product.quantite }}</td>
+                        <td>{{ product.unite }}</td>
+                        <td>{{ product.cout_de_revient }}</td>
+                        <td>{{ product.prix }}</td>
+                        <td>
+                            <a href="#"><i class="fa fa-trash" style="color:red"></i></a>
+                            <a href="{% url 'shop:product_update' product.id %}"><i style='font-size:20px' class='fas'>&#xf304;</i></a>
+{#                          <a href="{% url 'cart:cart_add' product.id %}"><i class="fa fa-plus-square"></i></a>#}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        <div class="pagination" align="center" style="align-content: center">
+            <span class="step-links">
+                {% if prod_list.has_previous %}
+                    <a  href="?page=1">&laquo; Début</a>
+                    <a  href="?page={{ prod_list.previous_page_number }}">Précédent</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ prod_list.number }} sur {{ prod_list.paginator.num_pages }}.
+                </span>
+
+                {% if prod_list.has_next %}
+                    <a href="?page={{ prod_list.next_page_number }}">Suivant</a>
+                    <a  href="?page={{ prod_list.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </form>
+    <script type="text/javascript">
+        function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("productCode");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("productsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        }
+    </script>
+{% endblock %}

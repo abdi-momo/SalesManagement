@@ -1,0 +1,180 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Produits{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+		<div class="row no-gutters">
+			<div class="col no-gutters">
+				<div class="leftside">
+					<div id="main" class="product-list">
+			             <h2>Inventaire actuel </h2>
+			             <br>
+			             <form type="post" action="" style="margin: 0" class="form-inline">
+			                 <div class="input-group">
+			                    <label for="code" class="nav-link"><h2>Référence</h2> </label>
+			                        <input  id="productCode" type="text" class="form-control form-control-lg" name="productCode"  placeholder="Entez le code du produit ..." onkeyup="myFunction()">
+			                    <br>
+			                 </div>
+			            </form>
+                        <hr style="width:700px; color:firebrick; background-color:firebrick; height:3px;" />
+			            <br>
+			            <table   id="productsTable" class="table table-striped">
+			                <thead>
+			                    <tr>
+			                        <th>Code</th>
+			                        <th>Libéllé</th>
+                                    <th>C revient </th>
+			                        <th>Qté</th>
+			                        <th>PU</th>
+                                    <th>Taux</th>
+{#                                    <th>Ajoute au panier</th>#}
+			                    </tr>
+			                </thead>
+			                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.code }}</td>
+{#                                    <td><a href="{% url 'cart:cart_add' product_id %}"> {{ product.libelle }} </a> </td>#}
+                                    <td><a href="{{ product.get_absolute_url }}"> {{ product.libelle }} </a> </td>
+{#                                    <td><a href="{% url 'cart:cart_add' product_id %}">{{ product.libelle }} </a></td>#}
+                                    <td>{{ product.cout_de_revient }}</td>
+                                    <td>{{ product.quantite }}</td>
+                                    <td>{{ product.prix }} KMF</td>
+                                    <td>{{ product.TVA|mul:100|floatformat:"0" }}%</td>
+{#                                        <form action="{% url "cart:cart_add" product.id %}" method="post">#}
+{#                                        {{ cart_product_form }}#}
+{#                                        {% csrf_token %}#}
+{#                                        <input type="submit" class="btn btn-primary" value="Ajouter au panier">#}
+{#                                    </form>#}
+{#                                        <a href="{% url "cart:cart_add" product.id %}">Ajouter au panier</a>#}
+{#                                    </td>#}
+                                </tr>
+			                {% endfor %}
+			            </table>
+	 				</div>
+				</div>
+			</div>
+
+			<div class="col no-gutters">
+{#                <a href="{% url 'orders:daily_report' %}">#}
+{#                <h4>Cliquez ici pour voir votre solde journalier <strong> {{ totalAmountPerDay }} KMF </strong>!</h4>#}
+{#                    <h4>Vente de la journée <b> {{ daily_Sales }} KMF </b></h4>#}
+
+{#            <marquee behavior="scroll" direction="right"><h3>Cliquez ici pour voir votre solde journalier <strong> {{ totalAmountPerDay }} KMF </strong>!</h3>#}
+{#                <h3>Vente de la journée <b> {{ daily_Sales }} KMF </b></h3>#}
+{#            </marquee>#}
+
+
+            </a>
+				<div class="rightside">
+					<h2>Votre Panier</h2>
+                    <hr style="width:700px; color:firebrick; background-color:firebrick; height:3px;" />
+	    			<table class="table table-striped" >
+	        			<thead>
+				            <tr>
+				                <th scope="col">Produit</th>
+				                <th scope="col">Quantité</th>
+				                <th scope="col">Supprimer</th>
+				                <th scope="col">PU</th>
+				                <th scope="col">MONTANT</th>
+				                <th scope="col">TC</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            {% for item in cart %}
+				                {% with product=item.product %}
+				                    <tr>
+				                        <td>{{ product.libelle }}</td>
+				                        <td>
+				                            <form action="{% url "cart:cart_add" product.id %}" method="post">
+				                                {{ item.update_quantity_form.quantite }}
+				                                {{ item.update_quantity_form.update }}
+				                                <input type="submit" class="btn btn-primary" value="Actualiser">
+				                                {% csrf_token %}
+				                            </form>
+				                        </td>
+				                        <td><a href="{% url "cart:cart_remove" product.id %}" class="btn btn-primary">Supprimer</a></td>
+				                        <td class="num">{{ item.price }} KMF</td>
+				                        <td class="num">{{ item.total_price|stringformat:"0.2f" }} KMF</td>
+				                        <td class="num">{{item.tax_rate|mul:100|floatformat:"0"}}%</td>
+				                    </tr>
+				                {% endwith %}
+				            {% endfor %}
+
+				                {% if cart.coupon %}
+				                <tr class="subtotal">
+				                    <td>Sous-total</td>
+				                    <td colspan="4"></td>
+				                    <td class="num">{{ cart.get_total_price|floatformat:"2" }} KMF</td>
+				                </tr>
+				                <tr>
+				                    <td>
+					                    "{{ cart.coupon.code }}" rémise de
+					                    {{ cart.coupon.discount }}%
+				                    </td>
+				                    <td colspan="4"></td>
+				                    <td class="num neg">
+				                    - {{ cart.get_discount|floatformat:"2" }} KMF
+				                    </td>
+				                </tr>
+				                {% endif %}
+				                <tr>
+				                	<td>TC</td>
+				                    <td colspan="3"></td>
+				                    <td class="num">
+				                        {{ cart.get_total_tva|floatformat:"2" }} KMF
+				                    </td>
+				                </tr>
+				                <tr class="total">
+				                    <td>Total TTC</td>
+				                    <td colspan="3"></td>
+				                    <td class="num">
+				                        {{ cart.get_total_price_after_discount|floatformat:"2" }} KMF
+				                    </td>
+				                </tr>
+				                 <tr>
+				                    <td colspan="5">
+				                        <p class="text-right">
+				                            <a href="{% url "shop:product_list" %}" class="btn btn-info btn-lg active" role="button" aria-pressed="true">Ajouter des articles</a>
+				                            <a href="{% url "orders:order_create" %}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">
+				                                Réglement
+				                            </a>
+				                        </p>
+				                    </td>
+			                    </tr>
+				        </tbody>
+				    </table>
+				    <p>Appliquer une rémise:</p>
+				    <form action="{% url "coupons:apply" %}" method="post">
+				        {{ coupon_apply_form }}
+				        <input type="submit" value="Appliquer" class="btn btn-info btn-lg active">
+				        {% csrf_token %}
+				    </form>
+				</div>
+			</div>
+		</div>
+	</div>
+     <script type="text/javascript">
+        function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("productCode");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("productsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        }
+    </script>
+{% endblock %}

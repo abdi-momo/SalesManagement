@@ -1,0 +1,229 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <title>{% block title %}Akyl Market{% endblock %}</title>
+        <!-- Bootstrap CSS -->
+        <style>
+            form {
+                margin-left: 15%;
+                margin-right:15%;
+                width: 70%;
+                background-color: #36B9CC;
+            }
+
+            .leftsideprod, .rightsideprod{
+                height: 100vh;
+                width: 100%;
+
+            }
+
+            .rightsideprod{
+                width: 80%;
+               margin-left: 0px;
+                padding: 10px;
+                {#background-color: #34ce57;#}
+
+            }
+            .leftsideprod{
+                {#left: 0px;#}
+                margin-left: 0px;
+                padding: 10px;
+                right: 0px;
+                overflow: auto;
+                width: 135%;
+
+                {#background-color: lavender;#}
+
+            }
+
+            .leftside,.rightside{
+                height: 100vh;
+                {#width: 100%;#}
+                {#background-color:#6a1b9a;#}
+                position:absolute;
+
+            }
+
+            .leftside{
+                {#left: 0px;#}
+                margin-left: 0px;
+                padding: 10px;
+                right: 0px;
+                overflow: auto;
+                width: 135%;
+                background-color: lavender;
+
+            }
+            .rightside{
+                width: 135%;
+                margin-left: 0px;
+                padding: 10px;
+                {#right: 0px;#}
+                background-color:#36B9CC;
+                {#background-color: lavender;#}
+            }
+            .col-sm-12{
+                background-color:darkturquoise;
+
+            }
+
+            .container2 {
+                margin-bottom: 50px;
+                border: 1px solid rgba( 0,0,0, .4 );
+                padding: 40px;
+                border-radius: 6px;
+                margin-left: 15%;
+                margin-right:15%;
+            }
+
+        </style>
+{#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">#}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>#}
+    </head>
+    <body>
+        <div id="header">
+            <nav class="navbar navbar-expand-lg navbar-dark secondary-color lighten-1" style="background-color: #6a1b9a;" id='navcolor'>
+                <a class="navbar-brand" href="/" class="logo">Akyl Market</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown active">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-list" aria-hidden="true"></i>Catégories
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'shop:listeCategory' %}">Liste des catégories</a>
+                                    </li>
+                                    <li class="dropdown-item" {% if not category %}class="selected"{% endif %}>
+                                        <a href="{% url "shop:product_list" %}">Tous</a>
+                                    </li>
+                                    {% for c in categories %}
+                                    <li class="dropdown-item" {% if category.slug == c.slug %}class="selected"
+                                        {% endif %}>
+                                        <a href="{{ c.get_absolute_url }}">{{ c.nom }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown active">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-gamepad" aria-hidden="true"></i> Catégorie & Produits <span class="sr-only">(current)</span></a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'shop:create-product' %}">Nouveau produit</a>
+                                    </li>
+                                     <li class="dropdown-item">
+                                        <a href="{% url 'shop:products_List' %}">Product list</a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'shop:create-category' %}">Catégorie</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown active">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               <i class="fa">&#xf19c;</i></i></i> Rapport</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul>
+                                    <li class="dropdown-item">
+                                        <a  href="{% url 'orders:daily_report' %}">Somme par utilisateur(s) connecté(s)</a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                       <a href="{% url 'orders:mosly_saled' %}">Produits les plus vendus </a></li>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'orders:chart' %}"><i class="fa fa-bar-chart" style="font-size:36px"></i> Chart</a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'orders:important_sold' %}">Produit rentable</a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a href="{% url 'orders:monthly_report' %}">Apperçu périodique</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'orders:order_list' %}">Liste des ventes</a>
+                        </li>
+                    </ul>
+                        {% if user.is_authenticated %}
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-item" style="color: cornflowerblue">{{ user|capfirst }}</div>
+                                        <a class="dropdown-item" href="{% url 'shop:add_user' %}">Ajouter un utilisateur</a>
+                                        <a class="dropdown-item" href="{% url 'shop:logout' %}">Se deconnecter</a>
+                                        <a class="dropdown-item" href="{% url 'orders:daily_report' %}">Votre solde journalier: {{ totalAmountPerDay }}KMF</a>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div id="subheader">
+                        <div class="cart nav-link" >
+                            {% with total_items=cart|length %}
+                                {% if cart|length > 0 %}
+                                Votre panier:
+                                <a class="nav-link" href="{% url "cart:cart_detail" %}">
+                                    {{ total_items }} article{{ total_items|pluralize }},
+                                    {{ cart.get_total_price }} KMF
+                                </a>
+                                {% else %}
+                                    Le panier est vide.
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+            </nav>
+            {% if messages %}
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        {% for message in messages %}
+                            <div class="{{ message.tags }}">
+                                <h2 align="center">{{ message }}</h2>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            {% endif %}
+        </div>
+        <br>
+
+        {% if user.is_authenticated %}
+
+        {% endif %}
+
+        <div id="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

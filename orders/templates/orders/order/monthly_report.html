@@ -1,0 +1,60 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <h2 align="center">Recherche des ventes par période</h2>
+    <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+    <form method="get" action="." >
+        {% csrf_token %}
+        <div id="sandbox" class="form-group">
+            <label for="code" class="nav-link">Date début:</label>
+            <input  class="dateDebut" id="dateDebut" type="date" name="datedebut" value="{% now 'Y-m-d' %}">
+
+            <label for="code" class="nav-link">Date de fin</label>
+            <input  class="datefin" id="datefin" type="date" name="datefin" value="{% now 'Y-m-d' %}">
+        </div>
+{#        <div id="sandbox" class="form-group">#}
+{#            <label for="code" class="nav-link">Utilisateur</label>#}
+{#            <input  class="user" id="user" type="text" name="user">#}
+{#        </div>#}
+        <button type="submit" class="btn btn-default">Afficher</button>
+        <br>
+        <br>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Utilisateur</th>
+                    <th>Date création </th>
+{#                    <th>Date modification</th>#}
+                    <th>Montant Total</th>
+                    <th>Mode de paiement</th>
+                    <th>Détail</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orderList %}
+                    {% if order.get_total_cost %}
+                        <tr>
+                            <td>{{ order.id}}</td>
+                            <td> {{ order.utilisateur }}</td>
+                            <td>{{ order.date_creation }}</td>
+{#                            <td>{{ order.date_modification }}</td>#}
+                            <td>{{ order.get_total_cost }} </td>
+                            <td>{{ order.Mode_de_paiment }} </td>
+                            <td><a href="{% url 'orders:order_detail' order.id %}">Visualiser</a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{##}
+{#    {{ paiment }}#}
+{##}
+{#    <script type="text/javascript">#}
+{#        window.onload= function() {#}
+{#            document.querySelector('.dateDebut').value=(new Date()).toISOString().substr(0,10)#}
+{#            document.querySelector('.datefin').value=(new Date()).toISOString().substr(0,10)#}
+{#        }#}
+{#    </script>#}
+
+{% endblock %}

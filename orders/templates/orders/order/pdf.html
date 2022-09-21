@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% load mathfilters %}
+<html>
+    <head>
+        <style type="text/css">
+        @page {
+            size: B6;
+            margin: 1.5cm;
+        }
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 5px;
+            background-color: #fff;
+        }
+        .table th,
+        .table td {
+            padding: 5px;
+            vertical-align: top;
+            border-top: 0.5px solid #000;
+            text-align: center;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 1px solid #000;
+        }
+        .table tbody + tbody {
+            border-top: 1px solid #000;
+        }
+        .table .table {
+            background-color: #fff;
+        }
+        .list-group {
+            display: block;
+            width: 80%;
+            list-style: none;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .list-group p {
+            width: 80%;
+            height: 20px;
+            line-height: 10px;
+            list-style: none;
+            font-size: 1.1em;
+        }
+        #footer {
+            width:80%;
+            height:80px;
+            position:absolute;
+            bottom:0;
+            left:0;
+            background:#ee5;
+        }
+    </style>
+    </head>
+    <body>
+        <h1 align="center">AKYL MARKET
+            <!-- <br> -->
+            Adresse: OASIS Route presidence
+            <!-- <br> -->
+            <!-- Telephone: +2693384249 -->
+        </h1>
+        <p>
+            Facture no. {{ order.id }}
+            <span class="secondary">
+                Caissier(e) : {{ order.utilisateur }}, 
+                Date: {{ order.date_creation|date:"M d Y" }}
+            </span>
+        </p>
+            <!-- <h3>Facture de : </h3>
+            {{ order.first_name }} {{ order.last_name }}<br>
+            {{ order.email }}<br>
+            {{ order.address }}<br>
+            {{ order.postal_code }}, {{ order.city }}
+ -->        <h3>Articles achetes</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- <th>No</th> -->
+                    <th>Articles</th>
+                    <th>Prix(kmf)</th>
+                    <th>Qte</th>
+                    <th>Total(kmf)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                <tr>
+                    <!-- <td>{{ forloop.counter }}</td> -->
+                    <td>{{ item.product.libelle }} {{item.tva|mul:100|stringformat:".f"}}%</td>
+                    <td class="num"> {{ item.price }} </td>
+                    <td class="num"> {{ item.quantity }} </td>
+                    <td class="num"> {{ item.get_cost|stringformat:"0.2f" }} </td>
+                </tr>
+                {% endfor %}
+                <tr class="total">
+                    <td colspan="3">Total</td>
+                    <td class="num">{{ order.get_total_cost|stringformat:".2f" }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <span class="{% if order.paid %}paid{% else %}pending{% endif %}">
+                {% if order.paid %}
+                    Payee 
+                {% else %}
+                    En attente de payement 
+                {% endif %}
+        </span>
+
+    </body>
+    <div id="footer">
+        <h3 align="center">Merci d'etre passe a tres bientot</h3>
+    </div>
+</html>

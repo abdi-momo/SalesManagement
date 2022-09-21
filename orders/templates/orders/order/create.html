@@ -1,0 +1,28 @@
+{% extends "shop/base.html" %}
+{% load mathfilters %}
+{% block title %}
+    Réglement
+{% endblock %}
+{% block content %}
+    <form action="." method="post" class="order-form">
+        <div class="order-info" align="center">
+            <h2 align="center">Réglement de votre commande</h2>
+            <!-- <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" /> -->
+            <br>
+                <ul>
+                    {% for item in cart %}
+                    <li>
+                        {{ item.quantity }}x {{ item.product.libelle }}
+                        <span>{{ item.total_price }} KMF</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <p>Total: {{ cart.get_total_price_after_discount }} KMF</p>
+                    <p align="center">
+                    {{ form.as_p }}
+                    <input type="submit" class="btn btn-primary" value="Valider la commande"></p>
+                    {% csrf_token %}
+                <br>
+        </div>
+    </form>
+{% endblock %}

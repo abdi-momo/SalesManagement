@@ -1,0 +1,165 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Produits{% endif %}
+{% endblock %}
+
+<style>
+    table#shopping_cart{
+        width:100%;
+        border-collapse:collapse;
+        color:#616161;
+    }
+    h1,caption{
+        text-align:left;
+        font-size:x-large;
+    margin-bottom:15px;
+    color:Black;
+    }
+    th,td{
+        text-align:left;
+        padding:3px;
+    }
+    thead th{
+        color:White;
+        background-color:#616161;
+    }
+    tfoot th{
+        height:40px;
+    }
+    table#shopping_cart th.right, td.right{
+        text-align:right;
+    }
+    a.cart{
+        color:DarkOrange;
+}
+</style>
+
+{% block content %}
+    <div class="column">
+         <div id="main" class="product-list">
+             <h2 align="center">Inventaire actuel </h2>
+             <br>
+             <form type="post" action="" style="margin: 0" class="form-inline">
+                 <div class="input-group">
+                    <label for="code" class="nav-link"><h2>Référence</h2> </label>
+                        <input  id="productCode" type="text" class="form-control form-control-lg" name="productCode"  placeholder="Entez le code du produit ..." onkeyup="myFunction()">
+                    <br>
+                 </div>
+            </form>
+            <br>
+            <table   id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Libéllé</th>
+                        <th>Qté initiale</th>
+                        <th>PU</th>
+                    </tr>
+                </thead>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.code }}</td>
+                        <td><a href="{{ product.get_absolute_url }}"> {{ product.name }} </a> </td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.price }} KMF</td>
+                    </tr>
+                {% endfor %}
+            </table>
+{#            <div class="pagination" align="center" style="align-content: center">#}
+{#                <span class="step-links">#}
+{#                    {% if prod_list.has_previous %}#}
+{#                        <a  href="?page=1">&laquo; first</a>#}
+{#                        <a  href="?page={{ prod_list.previous_page_number }}">Previous</a>#}
+{#                    {% endif %}#}
+{#                    <span class="current">#}
+{#                        Page {{ prod_list.number }} of {{ prod_list.paginator.num_pages }}.#}
+{#                    </span>#}
+{##}
+{#                    {% if prod_list.has_next %}#}
+{#                        <a href="?page={{ prod_list.next_page_number }}">Next</a>#}
+{#                        <a  href="?page={{ prod_list.paginator.num_pages }}">last &raquo;</a>#}
+{#                    {% endif %}#}
+{#                </span>#}
+{#            </div>#}
+         </div>
+        <div class="column">
+            <h2 align="center">Récapitulatif de votre panier</h2>
+            <br>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+{#                    <th>#</th>#}
+                    <th scope="col">Produit</th>
+                    <th scope="col">Qté</th>
+                    <th scope="col">PU</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        {% with product=item.product %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ product.name }}</td>
+                                <td>
+                                    <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                        {% csrf_token %}
+                                        {{ item.update_quantity_form.quantity }}
+                                        {{ item.update_quantity_form.update }}
+                                        <input type="submit" value="Modifier" class="btn btn-info">
+                                    </form>
+                                </td>
+                                <td class="num"> {{ item.price }} KMF</td>
+                                <td class="num"> {{ item.total_price }} KMF</td>
+                                <td align="center" ><a href="{% url "cart:cart_remove" product.id %}"><i class="fa fa-trash" style="color:red"></a></td>
+                            </tr>
+                        {% endwith %}
+                    {% endfor %}
+                    {% if cart.coupon %}
+                        <tr class="subtotal">
+                            <td>Sous total</td>
+                            <td colspan="4"></td>
+                            <td class="num">{{ cart.get_total_price|floatformat:"2" }} KMF</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            "{{ cart.coupon.code }}" Rémise de
+                            ({{ cart.coupon.discount }}%)
+                            </td>
+                            <td colspan="4"></td>
+                            <td class="num neg">
+                            - {{ cart.get_discount|floatformat:"2" }} KMF
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr class="total">
+                        <td>Total</td>
+                        <td colspan="4"></td>
+                        <td class="num">
+                        {{ cart.get_total_price_after_discount|floatformat:"2" }} KMF
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <p class="text-right">
+                                <a href="{% url "shop:product_list" %}" class="btn btn-info btn-lg active" role="button" aria-pressed="true">Ajouter des articles</a>
+                                <a href="{% url "orders:order_create" %}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">
+                                    Réglement
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Appliquer une rémise:</p>
+                <form action="{% url "coupons:apply" %}" method="post">
+                    {{ coupon_apply_form }}
+                    <input type="submit" value="Appliquer" class="btn btn-info">
+                    {% csrf_token %}
+                </form>
+{#                <a href="{% url 'coupons:apply' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Appliquer</a>#}
+        </div>
+    </div>
+{% endblock %}

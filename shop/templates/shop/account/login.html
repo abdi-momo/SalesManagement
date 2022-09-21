@@ -1,0 +1,76 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+{% csrf_token %}
+    <br xmlns="http://www.w3.org/1999/html">
+    <br>
+    <br>
+    <div class="container" style="align-content: center">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div  class="panel panel-default">
+                    <div class="card-header">
+                        <h3 class="mb-0 text-center">S'identifier</h3>
+                    </div>
+                    <div class="messages">
+                        {% if messages %}
+                            {% for msg in messages %}
+                                <div class="alert alert-danger text-center" role="alert">
+                                    <i class="glyphicon glyphicon-exclamation-sign"></i>{{ msg }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="card-block">
+                        <form class="form" role="form" autocomplete="off" id="formLogin" method="post"
+                              action="{% url 'shop:signin' %}">
+                            <div class="form-group">
+                                <label for="uname1"> Utilisateur</label>
+                                <input type="text" class="form-control" name="username" id="uname1" required="">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd1"> Mot de passe</label>
+                                <input type="password" class="form-control" name="password" id="pwd1" required=""
+                                       autocomplete="new-password">
+                            </div>
+                            <div class="mycentered-text">
+                                <button type="submit" class="btn btn-primary">Connecter </button>
+                                <br>
+                                <br>
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <!--/card-block-->
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="card-header">
+                            <h3>Massiwa Technology</h3>
+                        </div>
+                        <p>Massiwa technology est une société spécialisé dans les nouvelles technologies, on vous propose différentes prestations : </p>
+                        <ul>
+                            <li> Formation en informatique.</li>
+                            <li> Développement d’application.</li>
+                            <li> Service de webmastering.</li>
+                            <li> Ventes de produit informatique.</li>
+
+                        </ul>
+                        <h3>A qui nous offerons nos services?</h3>
+                        <p>Tous nos services sont ouvert aux professionnels et au particulier.
+                            La volonté de Massiwa technology est de s’inscrire dans le développement de notre pays à travers les nouvelles technologies et l’essor du numérique.
+                            A l’aide de l’expertise et le dévouement de notre équipe , vos idées prennent vie.
+
+                        </p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <footer> <p align="center">&copy;www.massiwatechnology.com</p></footer>
+{% endblock %}

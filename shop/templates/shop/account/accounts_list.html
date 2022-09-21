@@ -1,0 +1,46 @@
+{% extends 'shop/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+    <!-- ACCOUNTS LIST -->
+    <div class="col-md-9">
+        <table class="table border">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nom utilisateur</th>
+                    <th scope="col">Préonom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rôle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                <tr>
+                    <td>{{ account.username }}</td>
+                    <td>{{ account.first_name }}</td>
+                    <td>{{ account.email }}</td>
+                    <td>
+                        {% for group in account.groups.all %}
+                            <span class="badge badge-dark">
+                                {{ group }}
+                            </span>
+                        {% empty %}
+                            Utilisateur général
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- SIDEBAR -->
+    <div class="col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'admin_tools:add_user' %}">nouveau utilisateur</a>
+            </li>
+        </ul>
+    </div> <!-- /sidebar -->
+</div>
+{% endblock %}

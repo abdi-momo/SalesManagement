@@ -1,0 +1,35 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+    <form>
+         <table   id="productsTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Utilisateur</th>
+                    <th>Date création </th>
+                    <th>Date modification</th>
+                    <th>Montant Total</th>
+                    <th>Détail</th>
+                    <th>Détail PDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in order_list %}
+                    {% if order.get_total_cost > 0 %}
+                    <tr>
+                        <td>{{ order.id}}</td>
+                        <td> {{ order.utilisateur }}</td>
+                        <td>{{ order.date_creation }}</td>
+                        <td>{{ order.date_modification }}</td>
+                        <td>{{ order.get_total_cost|floatformat:'2' }} </td>
+                        <td><a href="{% url 'orders:order_detail' order.id %}">Visualiser</a></td>
+                        <td><a href="{% url 'orders:order_pdf' order.id %}">PDF</a></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+            </table>
+    </form>
+{% endblock %}

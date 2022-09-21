@@ -1,0 +1,35 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+  <div id="container" style="width: 75%;">
+    <canvas id="pie-chart"></canvas>
+  </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+      <script>
+
+        var config = {
+          type: 'bar',
+          data: {
+            datasets: [{
+              data: {{ order_list|safe }},
+              backgroundColor: [
+                '#6a1b9a', '#721c24', '#dc3545', '#34ce57', '#D3D3D3'
+              ],
+              label: 'Quantités'
+            }],
+            labels: {{ order_list|safe }}
+          },
+          options: {
+            responsive: true
+          }
+        };
+
+        window.onload = function() {
+          var ctx = document.getElementById('pie-chart').getContext('2d');
+          window.myPie = new Chart(ctx, config);
+        };
+
+      </script>
+
+{% endblock %}

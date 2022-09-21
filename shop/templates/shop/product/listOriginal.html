@@ -1,0 +1,93 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Produits{% endif %}
+{% endblock %}
+
+<style>
+    table#shopping_cart{
+        width:100%;
+        border-collapse:collapse;
+        color:#616161;
+    }
+    h1,caption{
+        text-align:left;
+        font-size:x-large;
+    margin-bottom:15px;
+    color:Black;
+    }
+    th,td{
+        text-align:left;
+        padding:3px;
+    }
+    thead th{
+        color:White;
+        background-color:#616161;
+    }
+    tfoot th{
+        height:40px;
+    }
+    table#shopping_cart th.right, td.right{
+        text-align:right;
+    }
+    a.cart{
+        color:DarkOrange;
+}
+</style>
+
+{% block content %}
+    <div class="column">
+         <div id="main" class="product-list">
+             <h2 align="center">Inventaire actuel </h2>
+             <br>
+             <form type="post" action="" style="margin: 0" class="form-inline">
+                 <div class="input-group">
+                    <label for="code" class="nav-link"><h2>Référence</h2> </label>
+                        <input  id="productCode" type="text" class="form-control form-control-lg" name="productCode"  placeholder="Entez le code du produit ..." onkeyup="myFunction()">
+                    <br>
+                 </div>
+            </form>
+            <br>
+            <table   id="productsTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Libéllé</th>
+                        <th>Qté initiale</th>
+                        <th>PU</th>
+                    </tr>
+                </thead>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.code }}</td>
+                        <td><a href="{{ product.get_absolute_url }}"> {{ product.name }} </a> </td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.price }} KMF</td>
+                    </tr>
+                {% endfor %}
+            </table>
+         </div>
+    </div>
+
+    <script type="text/javascript">
+        function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("productCode");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("productsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        }
+    </script>
+{% endblock %}
+

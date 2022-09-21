@@ -1,0 +1,41 @@
+{% extends 'shop/base.html' %}
+{#{% load test %}#}
+{#{% load division %}#}
+{% load mathfilters %}
+{% block content %}
+    <h2 align="center">TOP 10 DES PRODUITS LES PLUS BENEFIQUES</h2>
+    <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+    <form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>Produits</th>
+                <th>Prix</th>
+                <th>Bénéfice</th>
+{#                <th>Pourcentage</th>#}
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for item in top_sold %}
+                <tr class="row{% cycle "1" "2" %}">
+                    <td>{{ forloop.counter }}</td>
+                    <td class="num"> {{ item.libelle }} </td>
+                    <td class="num"> {{ item.prix }} </td>
+                    <td>{{ benefice }}</td>
+{#                    <td class="num">{{ item.get_cost_margin|div:totol_amount|mul:100|floatformat:"2"  }}%</td>#}
+    {#                <td class="num"> {{ item.get_cost }} KMF</td>#}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock content %}
+charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>

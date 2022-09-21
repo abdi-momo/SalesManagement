@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}MAC BOUTIQUE {% endblock %}</title>
+  <!-- FONT AWESOME KIT -->
+  <script src="https://kit.fontawesome.com/16475baae0.js" crossorigin="anonymous"></script>
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+  
+  <!-- BOOTSTRAP4 CSS -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  
+  <!-- CUSTOM CSS -->
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+  <!-- Old CSS -->
+
+    <!-- <link rel="stylesheet" href="{% static 'CSS_file/font-awesome-4.7.0/css/font-awesome.css' %}"> -->
+
+    <link rel="stylesheet" href="{% static 'CSS_file/bootstrap-4.0.0/css/bootstrap.min.css' %}">
+
+  <!-- DataTable  --> 
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <style type="text/css">
+        .leftsideprod, .rightsideprod{
+                height: 100vh;
+                width: 80%;
+            }
+
+            .rightsideprod{
+               width: 80%;
+               margin-left: 0px;
+                padding: 10px;
+                /*background-color: #34ce57;*/
+
+            }
+            .leftsideprod{
+                /*left: 0px;*/
+                margin-left: 0px;
+                padding: 10px;
+                right: 0px;
+                overflow: auto;
+                width: 135%;
+
+                /*background-color: lavender;*/
+
+            }
+
+            .leftside,.rightside{
+                height: 100vh;
+               /* width: 100%;
+                background-color:#6a1b9a;*/
+                position:absolute;
+
+            }
+
+            .leftside{
+                /*left: 0px;*/
+                margin-left: 0px;
+                padding: 10px;
+                right: 0px;
+                overflow: auto;
+                width: 118%;
+                background-color: lavender;
+
+            }
+            .rightside{
+                width: 118%;
+                margin-left: 0px;
+                padding: 10px;
+                /*right: 0px;*/
+                background-color:#36B9CC;
+                /*background-color: lavender;*/
+            }
+            /*.col-sm-12{
+                background-color:darkturquoise;
+
+            }*/
+
+            .container2 {
+                margin-bottom: 50px;
+                border: 1px solid rgba( 0,0,0, .4 );
+                padding: 40px;
+                border-radius: 6px;
+                margin-left: 15%;
+                margin-right:15%;
+            }
+
+
+            /*Hover CSS*/
+
+            .card-body{
+                text-decoration: none;
+                &:hover{
+                    transition: all 0.2s ease-out;
+                    box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+                }
+                
+            }
+
+    </style>
+
+</head>
+
+<body class="bg-light">
+
+    <section id="dashboard">
+        <div class="container-fluid">
+            <div class="dashboard-container row">
+                <!-- START SIDENAV -->
+                <div class="col-12 col-sm-12 col-md-4 col-lg-2 sidenav">
+                    <div class="logo">
+                        <img src="{% static 'images/MAC_BOUTIQUE.jpeg' %}" alt="">
+                        <h1><a href="/"  class="sn-link">MAC BOUTIQUE</a></h1>
+                    </div>
+                    <div class="sn-group">
+                        <a href="" class="sn-link dash-home">
+                            <i class="fas fa-tachometer-alt"></i>Tableau de bord
+                        </a>
+
+                    </div>
+
+                    <div class="sn-group">
+                        <h5>Catégorie & Pièces</h5>
+                        <nav>
+                            <a class="sn-link" href="{% url 'shop:product_list' %}">
+                                <i class="fa fa-shopping-cart"></i>Panier
+                            </a>
+                            <a class="sn-link" href="{% url 'shop:create-product' %}">
+                                <i class="fas fa-plus"></i>Nouvelle pièce
+                            </a>
+                            <a href="{% url 'shop:products_List' %}" class="sn-link">
+                                <i class="fas fa-th-list"></i>Liste des pièces
+                            </a>
+
+                            <a href="{% url 'shop:create-category' %}" class="sn-link">
+                                <i class="fa fa-list"></i>Catégorie
+                            </a>
+
+                            <a href="" class="sn-link">
+                                <i class="fa fa-plus-square"></i>Fabriquant
+                            </a>
+
+                            <a href="" class="sn-link">
+                                <i class="fas fa-shipping-fast"></i>Fournisseur
+                            </a>
+                            <a href="" class="sn-link">
+                                <i class="fa fa-car"></i>Marque automobile
+                            </a>
+                            <a href="" class="sn-link">
+                                <i class="fa fa-server"></i>Modèle
+                            </a>
+
+                            <a href="" class="sn-link">
+                                <i class="fa fa-plus-square"></i>Bon de commande
+                            </a>
+                        </nav>
+                    </div>
+                    <div class="sn-group">
+                        <h5>Ventes & dépenses</h5>
+                        <nav>
+                            <a class="sn-link" href="">
+                                <i class="fas fa-wallet"></i>Ventes
+                            </a>
+                            <a class="sn-link" href="">
+                                <i class="fa fa-file-invoice"></i>Dépenses
+                            </a>
+                        </nav>
+                    </div>
+                    
+                    <div class="sn-group">
+                        <h5>Rapports</h5>
+                        <nav>
+                            <a class="sn-link" href="{% url 'orders:mosly_saled' %}">
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>Article les plus vendus
+                            </a>
+
+                            <a href="{% url 'orders:important_sold' %}" class="sn-link">
+                               <i class="fa fa-chart-line"></i>Articles plus bénéfiques
+                            </a>
+                            <a href="{% url 'orders:daily_report' %}" class="sn-link">
+                               <i class="fa fa-wallet"></i>Solde par utilisateur
+                            </a>
+                        </nav>
+                    </div>
+                    <div class="sn-group">
+                        <h5>Options admin</h5>
+                        <nav>
+                            <a href="{% url 'shop:add_user' %}" class="sn-link">
+                                <i class="fas fa-plus"></i>Nouveau utilisateur
+                            </a>
+
+                        </nav>
+                    </div>
+                </div>
+                    <!-- END OF SIDENAV -->
+                {% block dashboard-body %}
+                {% endblock dashboard-body %}
+                <!-- START DASHBOARD BODY -->
+                <div class="col-12 col-sm-12 col-md-8 col-lg-10 px-0 dashbody">
+                    <!-- NAVIGATION TOP -->
+                    <nav class="navbar navbar-expand-lg navbar-dark secondary-color lighten-1" style="background-color:#FFFF00;">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"            aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                            <form id="searchForm" class="form-inline">
+                                <input class="form-control" type="search" placeholder="Rechercher..." aria-label="Search">
+                                    <button id="searchBtn" class="btn lio-primary-bg my-2 my-sm-0" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                            <div class="navbar-nav ml-auto">
+ 
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                                    aria-expanded="false" style="color:black;"><i class="fas fa-user-circle fa-lg"></i>Admin</a>
+                                    <div class="dropdown-menu">
+                                        {% if request.user.is_authenticated %}
+                                            <a class="dropdown-item" href="">
+                                            Déconnecter {{ user.username }}
+                                            </a>
+                                        {% else %}
+                                        <a class="dropdown-item" href="">Se connecter</a>
+                                        {% endif %}
+
+                                        {% with total_items=cart|length %}
+                                            {% if cart|length > 0 %}
+                                            
+                                            <a class="dropdown-item" href="{% url "cart:cart_detail" %}">Votre panier:
+                                                {{ total_items }} article{{ total_items|pluralize }},
+                                                {{ cart.get_total_price }}KMF
+                                            </a>
+                                            {% else %}
+                                                <a class="dropdown-item" href="">Le panier est vide.</a>
+                                            {% endif %}
+                                        {% endwith %}
+
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </nav>
+                    <div id="dash-body-inner" class="container-fluid p-5">
+                        {% block content %}
+
+                        {% endblock %}
+                    </div>
+               </div>
+                    <!-- END NAV TOP -->
+                </div>
+
+            <!-- END DASHBOARD BODY -->
+            </div> <!-- dashboard container fluid -->
+        </div>
+    </section>
+    <!-- <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js" integrity="sha512-7dlzSK4Ulfm85ypS8/ya0xLf3NpXiML3s6HTLu4qDq7WiJWtLLyrXb9putdP3/1umwTmzIvhuu9EW7gHYSVtCQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+{% extends "shop/base.html" %}
+{% load mathfilters %}
+{% block title %}
+Merci beaucoup
+{% endblock %}
+{% block content %}
+<h1 align="center">Merci beaucoup d'être passé()</h1>
+<p align="center">Votre commande a été complétée avec succès. Votre numéro de commande est <strong>{{ order.id }}</strong>.</p>
+    <h2 align="center">Montant à rembourser:  <b> {{ refund|sub:cart.get_total_price }} KMF</b></h2>
+{% endblock %}

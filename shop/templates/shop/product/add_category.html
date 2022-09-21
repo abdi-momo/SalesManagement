@@ -1,0 +1,26 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Catégories
+{% endblock %}
+{% block content %}
+
+    <h2 align="center">CREATION DES CATEGORIES</h2>
+    <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+
+        <form action="." method="post" class="order-form">{% csrf_token %}
+             <table class="center">
+                <br>
+                {{ form|crispy }}
+                 <tr>
+                    <td>&nbsp;&nbsp; &nbsp;</td>
+                    <td>
+                        <br>
+                        <input type="submit" class="btn btn-primary" value="Enregistrer">
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </form>
+
+{% endblock %}

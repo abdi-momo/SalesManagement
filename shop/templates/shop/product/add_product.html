@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h2 align="center">AJOUT DES PRODUITS</h2>
+        <hr style="width:1150.5px; color:firebrick; background-color:firebrick; height:3px;" />
+    <div class="from">
+        <form method="post" action="." >{% csrf_token %}
+            <table class="center">
+                {{ form|crispy }}
+                <tr>
+                    <td>&nbsp;&nbsp; &nbsp;</td>
+                    <td>
+                        <br>
+                        <button type="submit" class="btn btn-primary"> Enregistrer </button>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </form>
+    </div>
+
+{% endblock%}
